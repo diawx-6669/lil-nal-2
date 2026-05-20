@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlowMind — Вход</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ink: #080c14;
+    --ink2: #0e1520;
+    --ink3: #141d2c;
+    --ink4: #1a2538;
+    --line: rgba(255,255,255,0.06);
+    --line2: rgba(255,255,255,0.1);
+    --txt: #dce8f5;
+    --txt-dim: #5a7080;
+    --acid: #05e5a3;
+    --acid-dim: rgba(5,229,163,0.1);
+    --acid-mid: rgba(5,229,163,0.22);
+    --gold: #e8a838;
+    --gold-dim: rgba(232,168,56,0.1);
+    --rose: #e84458;
+    --rose-dim: rgba(232,68,88,0.1);
+    --sky: #38a8e8;
+    --sky-dim: rgba(56,168,232,0.1);
+    --font: 'Outfit', sans-serif;
+    --mono: 'Space Mono', monospace;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--ink);
+    color: var(--txt);
+    font-family: var(--font);
+    overflow: hidden;
+  }
+
+  /* GRID BACKGROUND */
+  .bg-grid {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      linear-gradient(rgba(5,229,163,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(5,229,163,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .bg-glow {
+    position: fixed; pointer-events: none; z-index: 0;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(5,229,163,0.07) 0%, transparent 70%);
+    top: -200px; left: -200px;
+  }
+  .bg-glow2 {
+    position: fixed; pointer-events: none; z-index: 0;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(56,168,232,0.05) 0%, transparent 70%);
+    bottom: -100px; right: -100px;
+  }
+
+  /* LAYOUT */
+  .page {
+    position: relative; z-index: 1;
+    height: 100vh;
+    display: flex;
+    align-items: stretch;
+  }
+
+  /* LEFT PANEL */
+  .left-panel {
+    width: 420px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 48px;
+    border-right: 1px solid var(--line2);
+    background: linear-gradient(160deg, rgba(14,21,32,0.8) 0%, rgba(8,12,20,0.95) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .left-panel::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--acid), transparent);
+    opacity: 0.4;
+  }
+
+  .brand {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 56px;
+  }
+  .brand-logo {
+    width: 36px; height: 36px;
+    background: var(--acid);
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #000;
+    font-family: var(--mono);
+    letter-spacing: -1px;
+    box-shadow: 0 0 20px rgba(5,229,163,0.3);
+  }
+  .brand-name {
+    font-size: 18px; font-weight: 600; letter-spacing: -0.5px;
+  }
+  .brand-tag {
+    font-size: 10px; font-family: var(--mono); color: var(--acid);
+    background: var(--acid-dim);
+    padding: 2px 8px; border-radius: 4px;
+    margin-left: 4px; vertical-align: middle;
+  }
+
+  .left-headline { flex: 1; }
+  .left-headline h1 {
+    font-size: 32px; font-weight: 700; line-height: 1.15;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+  .left-headline h1 em { font-style: normal; color: var(--acid); }
+  .left-headline p {
+    font-size: 14px; color: var(--txt-dim); line-height: 1.7;
+    max-width: 300px;
+  }
+
+  .feature-list {
+    list-style: none;
+    margin-top: 40px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .feature-list li {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 13px; color: var(--txt-dim);
+  }
+  .feature-list li i {
+    width: 28px; height: 28px;
+    background: var(--ink3);
+    border: 1px solid var(--line2);
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: var(--acid);
+    flex-shrink: 0;
+  }
+
+  .footer-note {
+    font-size: 11px; color: var(--txt-dim);
+    margin-top: auto; padding-top: 32px;
+    font-family: var(--mono);
+    border-top: 1px solid var(--line);
+  }
+  .footer-note span { color: var(--acid); }
+
+  /* RIGHT PANEL — FORM */
+  .right-panel {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    overflow-y: auto;
+  }
+
+  .form-box {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  /* TABS */
+  .tab-switcher {
+    display: flex;
+    background: var(--ink2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 32px;
+  }
+  .tab-btn {
+    flex: 1; padding: 9px;
+    border-radius: 9px;
+    border: none; background: none;
+    font-family: var(--font);
+    font-size: 13px; font-weight: 500;
+    color: var(--txt-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    background: var(--ink4);
+    color: var(--txt);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+
+  /* FORM TITLE */
+  .form-title {
+    font-size: 22px; font-weight: 700; letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+  .form-subtitle {
+    font-size: 13px; color: var(--txt-dim);
+    margin-bottom: 28px;
+  }
+
+  /* INPUTS */
+  .field-group {
+    display: flex; flex-direction: column; gap: 4px;
+    margin-bottom: 16px;
+  }
+  .field-label {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--txt-dim);
+  }
+  .field-wrap {
+    position: relative;
+  }
+  .field-wrap i {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    font-size: 16px; color: var(--txt-dim); pointer-events: none;
+  }
+  .field-input {
+    width: 100%; height: 44px;
+    background: var(--ink2);
+    border: 1px solid var(--line2);
+    border-radius: 10px;
+    padding: 0 12px 0 40px;
+    font-family: var(--font);
+    font-size: 14px;
+    color: var(--txt);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .field-input:focus {
+    border-color: var(--acid);
+    box-shadow: 0 0 0 3px var(--acid-dim);
+  }
+  .field-input::placeholder { color: var(--txt-dim); }
+
+  select.field-input {
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .select-arrow {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    pointer-events: none; color: var(--txt-dim); font-size: 14px;
+  }
+
+  /* REGION GRID */
+  .region-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+    margin-bottom: 16px;
+  }
+  .region-card {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all 0.18s;
+    background: var(--ink2);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .region-card:hover { border-color: var(--line2); background: var(--ink3); }
+  .region-card.selected {
+    border-color: var(--acid);
+    background: var(--acid-dim);
+  }
+  .region-flag { font-size: 20px; line-height: 1; }
+  .region-info {}
+  .region-name { font-size: 12px; font-weight: 500; }
+  .region-sub { font-size: 10px; color: var(--txt-dim); }
+
+  /* STEP INDICATOR */
+  .steps {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 28px;
+  }
+  .step {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600; font-family: var(--mono);
+    border: 1px solid var(--line2);
+    color: var(--txt-dim);
+    background: var(--ink2);
+    transition: all 0.2s;
+  }
+  .step.active { border-color: var(--acid); color: var(--acid); background: var(--acid-dim); }
+  .step.done { background: var(--acid); color: #000; border-color: var(--acid); }
+  .step-line { flex: 1; height: 1px; background: var(--line); }
+  .step-line.done { background: var(--acid); opacity: 0.4; }
+  .step-label { font-size: 10px; color: var(--txt-dim); }
+
+  /* SUBMIT BUTTON */
+  .btn-submit {
+    width: 100%; height: 46px;
+    background: var(--acid);
+    border: none; border-radius: 10px;
+    font-family: var(--font);
+    font-size: 15px; font-weight: 600;
+    color: #000;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.2s;
+    letter-spacing: -0.3px;
+    box-shadow: 0 4px 20px rgba(5,229,163,0.2);
+  }
+  .btn-submit:hover {
+    background: #07f0ae;
+    box-shadow: 0 4px 28px rgba(5,229,163,0.35);
+    transform: translateY(-1px);
+  }
+  .btn-submit:active { transform: translateY(0); }
+
+  .btn-secondary {
+    width: 100%; height: 40px;
+    background: transparent;
+    border: 1px solid var(--line2);
+    border-radius: 10px;
+    font-family: var(--font);
+    font-size: 13px; font-weight: 500;
+    color: var(--txt-dim);
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--acid); color: var(--txt); }
+
+  /* SECTION DIVIDER */
+  .divider {
+    display: flex; align-items: center; gap: 10px;
+    margin: 16px 0;
+  }
+  .divider hr { flex: 1; border: none; border-top: 1px solid var(--line); }
+  .divider span { font-size: 11px; color: var(--txt-dim); font-family: var(--mono); }
+
+  /* FORM SCREENS */
+  .form-screen { display: none; }
+  .form-screen.active { display: block; }
+
+  .error-msg {
+    font-size: 11px; color: var(--rose);
+    margin-top: 4px;
+    display: none;
+  }
+
+  /* PASSWORD STRENGTH */
+  .strength-bar-wrap {
+    height: 3px; background: var(--ink3); border-radius: 2px; margin-top: 8px;
+    overflow: hidden;
+  }
+  .strength-bar {
+    height: 100%; border-radius: 2px;
+    transition: width 0.3s, background 0.3s;
+    width: 0;
+  }
+
+  /* ANIMATIONS */
+  .form-box { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+  /* SCROLLBAR */
+  .right-panel::-webkit-scrollbar { width: 4px; }
+  .right-panel::-webkit-scrollbar-thumb { background: var(--ink4); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+<div class="bg-glow2"></div>
+
+<div class="page">
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="brand">
+      <div class="brand-logo">FM</div>
+      <div>
+        <span class="brand-name">FlowMind</span>
+        <span class="brand-tag">v2.4</span>
+      </div>
+    </div>
+
+    <div class="left-headline">
+      <h1>Умное управление<br><em>платёжными потоками</em></h1>
+      <p>Многовалютный дашборд с адаптацией под регион — видите только те платёжные сети, которые работают у вас.</p>
+
+      <ul class="feature-list">
+        <li><i class="ti ti-world"></i> Поддержка 40+ платёжных систем по регионам</li>
+        <li><i class="ti ti-chart-area"></i> AI-прогноз кассовых разрывов</li>
+        <li><i class="ti ti-shield-check"></i> Мониторинг рисков в реальном времени</li>
+        <li><i class="ti ti-bell-ringing"></i> Алерты раннего предупреждения</li>
+      </ul>
+    </div>
+
+    <div class="footer-note">
+      <span>FlowMind</span> · Fintech Intelligence Platform<br>
+      Все данные зашифрованы · AES-256
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div class="form-box">
+
+      <!-- TAB SWITCHER -->
+      <div class="tab-switcher">
+        <button class="tab-btn active" onclick="switchMode('login')">Войти</button>
+        <button class="tab-btn" onclick="switchMode('register')">Регистрация</button>
+      </div>
+
+      <!-- ======================== LOGIN ======================== -->
+      <div class="form-screen active" id="screen-login">
+        <div class="form-title">С возвращением</div>
+        <div class="form-subtitle">Войдите в свой аккаунт FlowMind</div>
+
+        <div class="field-group">
+          <label class="field-label">Email</label>
+          <div class="field-wrap">
+            <i class="ti ti-mail"></i>
+            <input type="email" class="field-input" placeholder="you@company.com" id="login-email">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Пароль</label>
+          <div class="field-wrap">
+            <i class="ti ti-lock"></i>
+            <input type="password" class="field-input" placeholder="••••••••" id="login-pass">
+          </div>
+        </div>
+
+        <button class="btn-submit" onclick="doLogin()">Войти в систему →</button>
+        <div style="text-align:center;margin-top:14px">
+          <span style="font-size:12px;color:var(--txt-dim)">Нет аккаунта?</span>
+          <button onclick="switchMode('register')" style="border:none;background:none;color:var(--acid);font-size:12px;cursor:pointer;font-family:var(--font);margin-left:4px">Зарегистрироваться</button>
+        </div>
+      </div>
+
+      <!-- ======================== REGISTER STEP 1 ======================== -->
+      <div class="form-screen" id="screen-reg1">
+        <div class="steps">
+          <div class="step active">1</div>
+          <div class="step-line"></div>
+          <div class="step">2</div>
+          <div class="step-line"></div>
+          <div class="step">3</div>
+        </div>
+        <div class="form-title">Создать аккаунт</div>
+        <div class="form-subtitle">Шаг 1 — Учётные данные</div>
+
+        <div class="field-group">
+          <label class="field-label">Имя и фамилия</label>
+          <div class="field-wrap">
+            <i class="ti ti-user"></i>
+            <input type="text" class="field-input" placeholder="Иван Петров" id="reg-name">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Рабочий Email</label>
+          <div class="field-wrap">
+            <i class="ti ti-mail"></i>
+            <input type="email" class="field-input" placeholder="you@company.com" id="reg-email">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Пароль</label>
+          <div class="field-wrap">
+            <i class="ti ti-lock"></i>
+            <input type="password" class="field-input" placeholder="Минимум 8 символов" id="reg-pass" oninput="checkStrength(this.value)">
+          </div>
+          <div class="strength-bar-wrap"><div class="strength-bar" id="strength-bar"></div></div>
+        </div>
+
+        <button class="btn-submit" onclick="goStep2()">Далее →</button>
+      </div>
+
+      <!-- ======================== REGISTER STEP 2 — REGION ======================== -->
+      <div class="form-screen" id="screen-reg2">
+        <div class="steps">
+          <div class="step done"><i class="ti ti-check" style="font-size:11px"></i></div>
+          <div class="step-line done"></div>
+          <div class="step active">2</div>
+          <div class="step-line"></div>
+          <div class="step">3</div>
+        </div>
+        <div class="form-title">Ваш регион</div>
+        <div class="form-subtitle">Шаг 2 — Выберите регион для персонализации платёжных систем</div>
+
+        <div class="region-grid" id="region-grid">
+          <div class="region-card" onclick="selectRegion(this,'CIS')" data-region="CIS">
+            <span class="region-flag">🇰🇿</span>
+            <div class="region-info">
+              <div class="region-name">СНГ / ЦА</div>
+              <div class="region-sub">KZ, RU, UZ, KG…</div>
+            </div>
+          </div>
+          <div class="region-card" onclick="selectRegion(this,'EU')" data-region="EU">
+            <span class="region-flag">🇪🇺</span>
+            <div class="region-info">
+              <div class="region-name">Европа</div>
+              <div class="region-sub">EU + EEA</div>
+            </div>
+          </div>
+          <div class="region-card" onclick="selectRegion(this,'US')" data-region="US">
+            <span class="region-flag">🇺🇸</span>
+            <div class="region-info">
+              <div class="region-name">США / Америка</div>
+              <div class="region-sub">North & South</div>
+            </div>
+          </div>
+          <div class="region-card" onclick="selectRegion(this,'MENA')" data-region="MENA">
+            <span class="region-flag">🇦🇪</span>
+            <div class="region-info">
+              <div class="region-name">MENA</div>
+              <div class="region-sub">Ближний Восток</div>
+            </div>
+          </div>
+          <div class="region-card" onclick="selectRegion(this,'APAC')" data-region="APAC">
+            <span class="region-flag">🇸🇬</span>
+            <div class="region-info">
+              <div class="region-name">APAC</div>
+              <div class="region-sub">Азия-Тихоокеанск.</div>
+            </div>
+          </div>
+          <div class="region-card" onclick="selectRegion(this,'AFRICA')" data-region="AFRICA">
+            <span class="region-flag">🌍</span>
+            <div class="region-info">
+              <div class="region-name">Африка</div>
+              <div class="region-sub">Sub-Saharan & North</div>
+            </div>
+          </div>
+          <div class="region-card" onclick="selectRegion(this,'LATAM')" data-region="LATAM">
+            <span class="region-flag">🇧🇷</span>
+            <div class="region-info">
+              <div class="region-name">Латинская Америка</div>
+              <div class="region-sub">Brazil, MX, AR…</div>
+            </div>
+          </div>
+          <div class="region-card" onclick="selectRegion(this,'GLOBAL')" data-region="GLOBAL">
+            <span class="region-flag">🌐</span>
+            <div class="region-info">
+              <div class="region-name">Глобальный</div>
+              <div class="region-sub">Все системы</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="region-error" style="font-size:11px;color:var(--rose);margin-bottom:8px;display:none">Выберите регион</div>
+        <button class="btn-submit" onclick="goStep3()">Далее →</button>
+        <button class="btn-secondary" onclick="goBack(1)">← Назад</button>
+      </div>
+
+      <!-- ======================== REGISTER STEP 3 — ORG ======================== -->
+      <div class="form-screen" id="screen-reg3">
+        <div class="steps">
+          <div class="step done"><i class="ti ti-check" style="font-size:11px"></i></div>
+          <div class="step-line done"></div>
+          <div class="step done"><i class="ti ti-check" style="font-size:11px"></i></div>
+          <div class="step-line done"></div>
+          <div class="step active">3</div>
+        </div>
+        <div class="form-title">Организация</div>
+        <div class="form-subtitle">Шаг 3 — Последние детали</div>
+
+        <div class="field-group">
+          <label class="field-label">Название компании</label>
+          <div class="field-wrap">
+            <i class="ti ti-building"></i>
+            <input type="text" class="field-input" placeholder="ТОО FlowMind Corp." id="reg-company">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Тип деятельности</label>
+          <div class="field-wrap">
+            <i class="ti ti-briefcase"></i>
+            <select class="field-input" id="reg-type">
+              <option value="" disabled selected>Выберите…</option>
+              <option>Банк / Финансовое учреждение</option>
+              <option>Платёжный агрегатор</option>
+              <option>Импортёр / Экспортёр</option>
+              <option>Fintech-стартап</option>
+              <option>Корпоративный казначей</option>
+              <option>Другое</option>
+            </select>
+            <i class="ti ti-chevron-down select-arrow" style="left:unset"></i>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Объём транзакций в мес.</label>
+          <div class="field-wrap">
+            <i class="ti ti-currency-dollar"></i>
+            <select class="field-input" id="reg-volume">
+              <option value="" disabled selected>Выберите…</option>
+              <option>До $100K</option>
+              <option>$100K — $1M</option>
+              <option>$1M — $10M</option>
+              <option>Более $10M</option>
+            </select>
+            <i class="ti ti-chevron-down select-arrow" style="left:unset"></i>
+          </div>
+        </div>
+
+        <button class="btn-submit" onclick="finishRegister()">Создать аккаунт →</button>
+        <button class="btn-secondary" onclick="goBack(2)">← Назад</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let currentMode = 'login';
+  let selectedRegion = null;
+
+  const REGION_DATA = {
+    CIS:    { name: 'СНГ / Центральная Азия', flag: '🇰🇿' },
+    EU:     { name: 'Европа',                 flag: '🇪🇺' },
+    US:     { name: 'США / Америка',          flag: '🇺🇸' },
+    MENA:   { name: 'MENA',                   flag: '🇦🇪' },
+    APAC:   { name: 'APAC',                   flag: '🇸🇬' },
+    AFRICA: { name: 'Африка',                 flag: '🌍' },
+    LATAM:  { name: 'Латинская Америка',      flag: '🇧🇷' },
+    GLOBAL: { name: 'Глобальный',             flag: '🌐' },
+  };
+
+  function showScreen(id) {
+    document.querySelectorAll('.form-screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function switchMode(mode) {
+    currentMode = mode;
+    document.querySelectorAll('.tab-btn').forEach((b,i) => {
+      b.classList.toggle('active', (mode==='login'&&i===0)||(mode==='register'&&i===1));
+    });
+    showScreen(mode === 'login' ? 'screen-login' : 'screen-reg1');
+  }
+
+  function selectRegion(el, code) {
+    document.querySelectorAll('.region-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedRegion = code;
+    document.getElementById('region-error').style.display = 'none';
+  }
+
+  function checkStrength(pass) {
+    const bar = document.getElementById('strength-bar');
+    let score = 0;
+    if (pass.length >= 8) score++;
+    if (/[A-Z]/.test(pass)) score++;
+    if (/[0-9]/.test(pass)) score++;
+    if (/[^A-Za-z0-9]/.test(pass)) score++;
+    const w = [0, 25, 50, 75, 100][score];
+    const c = ['#e84458','#e8a838','#38a8e8','#05e5a3'][Math.min(score-1,3)] || '#e84458';
+    bar.style.width = w + '%';
+    bar.style.background = c;
+  }
+
+  function doLogin() {
+    const email = document.getElementById('login-email').value.trim();
+    const pass  = document.getElementById('login-pass').value;
+    if (!email || !pass) { alert('Заполните все поля'); return; }
+
+    // Get stored user
+    const stored = JSON.parse(localStorage.getItem('fm_user') || 'null');
+    if (stored && stored.email === email) {
+      localStorage.setItem('fm_session', JSON.stringify(stored));
+      window.location.href = 'dashboard.html';
+    } else {
+      // Demo login
+      const demo = { email, name: 'Demo User', region: 'CIS', company: 'Demo Corp' };
+      localStorage.setItem('fm_session', JSON.stringify(demo));
+      window.location.href = 'dashboard.html';
+    }
+  }
+
+  function goStep2() {
+    const name  = document.getElementById('reg-name').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const pass  = document.getElementById('reg-pass').value;
+    if (!name || !email || pass.length < 8) { alert('Заполните все поля (пароль минимум 8 символов)'); return; }
+    showScreen('screen-reg2');
+  }
+
+  function goStep3() {
+    if (!selectedRegion) { document.getElementById('region-error').style.display='block'; return; }
+    showScreen('screen-reg3');
+  }
+
+  function goBack(step) {
+    showScreen(step === 1 ? 'screen-reg1' : 'screen-reg2');
+  }
+
+  function finishRegister() {
+    const company = document.getElementById('reg-company').value.trim();
+    const type    = document.getElementById('reg-type').value;
+    const volume  = document.getElementById('reg-volume').value;
+    if (!company || !type || !volume) { alert('Заполните все поля'); return; }
+
+    const user = {
+      name:    document.getElementById('reg-name').value.trim(),
+      email:   document.getElementById('reg-email').value.trim(),
+      region:  selectedRegion,
+      company, type, volume
+    };
+    localStorage.setItem('fm_user', JSON.stringify(user));
+    localStorage.setItem('fm_session', JSON.stringify(user));
+    window.location.href = 'dashboard.html';
+  }
+</script>
+</body>
+</html>

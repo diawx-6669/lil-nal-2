@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlowMind — Дашборд</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<!-- AUTH GUARD overlay while JS loads -->
+<div id="auth-gate" style="position:fixed;inset:0;background:#080c14;z-index:9999;display:flex;align-items:center;justify-content:center">
+  <div style="font-family:'Space Mono',monospace;font-size:12px;color:#05e5a3;letter-spacing:2px">ЗАГРУЗКА…</div>
+</div>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <div class="brand-logo">FM</div>
+    <span class="brand-name">FlowMind</span>
+    <span class="breadcrumb">/ <span id="page-title">Дашборд</span></span>
+  </div>
+  <div class="topbar-center">
+    <div class="region-badge" id="region-badge">
+      <span id="region-flag">🌐</span>
+      <span id="region-label">Загрузка…</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="live-pill">
+      <div class="live-dot"></div>
+      <span>LIVE</span>
+    </div>
+    <div class="clock" id="clock">—</div>
+    <div class="user-avatar" id="user-avatar" title="Профиль" onclick="toggleProfile()">?</div>
+  </div>
+</header>
+
+<!-- PROFILE DROPDOWN -->
+<div class="profile-drop" id="profile-drop">
+  <div class="profile-name" id="drop-name">—</div>
+  <div class="profile-email" id="drop-email">—</div>
+  <div class="profile-divider"></div>
+  <div class="profile-region">
+    <span id="drop-region-flag">🌐</span>
+    <span id="drop-region-name">—</span>
+  </div>
+  <div class="profile-divider"></div>
+  <button class="profile-logout" onclick="logout()"><i class="ti ti-logout"></i> Выйти</button>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <button class="nav-item active" title="Дашборд" onclick="setNav(this,'Дашборд')"><i class="ti ti-layout-dashboard"></i></button>
+    <button class="nav-item" title="Аналитика" onclick="setNav(this,'Аналитика')"><i class="ti ti-chart-area-line"></i></button>
+    <button class="nav-item" title="Платёжные системы" onclick="setNav(this,'Платёжные системы')"><i class="ti ti-network"></i></button>
+    <button class="nav-item" title="Риски" onclick="setNav(this,'Риски')"><i class="ti ti-shield-bolt"></i></button>
+    <button class="nav-item" title="Счета" onclick="setNav(this,'Счета')"><i class="ti ti-building-bank"></i></button>
+    <div class="nav-spacer"></div>
+    <button class="nav-item" title="Настройки" onclick="setNav(this,'Настройки')"><i class="ti ti-settings"></i></button>
+  </nav>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- METRICS ROW -->
+    <div class="metrics-row">
+      <div class="metric-card green">
+        <div class="metric-label"><i class="ti ti-wallet"></i> Общий резерв</div>
+        <div class="metric-val" style="color:var(--acid)">$47.3M</div>
+        <div class="metric-delta pos">↑ +2.1% за 24ч</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label"><i class="ti ti-arrows-exchange"></i> Транзакции / мин</div>
+        <div class="metric-val" id="tps">12,847</div>
+        <div class="metric-delta pos">↑ пик нагрузки</div>
+      </div>
+      <div class="metric-card amber">
+        <div class="metric-label"><i class="ti ti-clock-pause"></i> Задержки</div>
+        <div class="metric-val" style="color:var(--gold)">3</div>
+        <div class="metric-delta warn">⚠ +2.1ч</div>
+      </div>
+      <div class="metric-card red">
+        <div class="metric-label"><i class="ti ti-alert-triangle"></i> Риск разрыва</div>
+        <div class="metric-val" style="color:var(--rose)">2</div>
+        <div class="metric-delta neg">EUR · 22 мая</div>
+      </div>
+    </div>
+
+    <!-- PAYMENT SYSTEMS SECTION (dynamic per region) -->
+    <div class="section-header">
+      <span class="section-title">ПЛАТЁЖНЫЕ СИСТЕМЫ</span>
+      <span class="section-sub" id="ps-region-label">для вашего региона</span>
+    </div>
+    <div class="payment-systems-grid" id="payment-systems-grid">
+      <!-- filled by JS -->
+    </div>
+
+    <!-- MID ROW: chart + alerts -->
+    <div class="mid-row">
+
+      <!-- CHART -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">ПРОГНОЗ CASH FLOW</span>
+          <div class="tab-group">
+            <button class="tab active">1д</button>
+            <button class="tab">3д</button>
+            <button class="tab">7д</button>
+            <button class="tab">30д</button>
+          </div>
+        </div>
+        <div class="chart-area">
+          <svg viewBox="0 0 560 150" preserveAspectRatio="none" width="100%" height="100%">
+            <defs>
+              <linearGradient id="gg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#05e5a3" stop-opacity="0.18"/>
+                <stop offset="100%" stop-color="#05e5a3" stop-opacity="0"/>
+              </linearGradient>
+              <linearGradient id="gga" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#e8a838" stop-opacity="0.12"/>
+                <stop offset="100%" stop-color="#e8a838" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <line x1="0" y1="37" x2="560" y2="37" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="75" x2="560" y2="75" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="113" x2="560" y2="113" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <path d="M0,88 C40,78 80,58 130,53 C180,48 210,68 260,63 C310,58 340,43 400,48 C450,53 500,38 560,33 L560,150 L0,150 Z" fill="url(#gg)"/>
+            <path d="M0,88 C40,78 80,58 130,53 C180,48 210,68 260,63 C310,58 340,43 400,48 C450,53 500,38 560,33" fill="none" stroke="#05e5a3" stroke-width="1.5"/>
+            <path d="M0,98 C50,103 100,93 150,98 C200,103 230,118 280,108 C330,98 370,88 420,93 C460,98 510,103 560,98 L560,150 L0,150 Z" fill="url(#gga)"/>
+            <path d="M0,98 C50,103 100,93 150,98 C200,103 230,118 280,108 C330,98 370,88 420,93 C460,98 510,103 560,98" fill="none" stroke="#e8a838" stroke-width="1" stroke-dasharray="4,3"/>
+            <line x1="370" y1="0" x2="370" y2="150" stroke="rgba(232,68,88,0.35)" stroke-width="1" stroke-dasharray="3,3"/>
+            <rect x="360" y="4" width="62" height="16" rx="3" fill="rgba(232,68,88,0.12)"/>
+            <text x="391" y="15" font-size="8" fill="#e84458" font-family="Space Mono" text-anchor="middle">EUR риск</text>
+            <text x="0"   y="145" font-size="8" fill="rgba(90,112,128,0.8)" font-family="Space Mono">Сейчас</text>
+            <text x="260" y="145" font-size="8" fill="rgba(90,112,128,0.8)" font-family="Space Mono" text-anchor="middle">+8ч</text>
+            <text x="540" y="145" font-size="8" fill="rgba(90,112,128,0.8)" font-family="Space Mono" text-anchor="middle">+24ч</text>
+          </svg>
+        </div>
+        <div class="chart-legend">
+          <span><span class="leg-line solid"></span>Поступления</span>
+          <span><span class="leg-line dashed"></span>Выплаты</span>
+        </div>
+      </div>
+
+      <!-- ALERTS -->
+      <div class="card alerts-card">
+        <div class="card-header">
+          <span class="card-title">АЛЕРТЫ</span>
+          <span class="badge rose">3 АКТИВНЫХ</span>
+        </div>
+        <div class="alert-item">
+          <div class="alert-dot rose"></div>
+          <div>
+            <div class="alert-text">Кассовый разрыв EUR счёта</div>
+            <div class="alert-meta">Santander · дефицит ~€2.4M</div>
+            <span class="badge-sm rose">22 мая · через 48ч</span>
+          </div>
+        </div>
+        <div class="alert-item">
+          <div class="alert-dot gold"></div>
+          <div>
+            <div class="alert-text">Задержка JPY-канала</div>
+            <div class="alert-meta">Mizuho Bank · +2.1ч</div>
+            <span class="badge-sm gold">Низкий приоритет</span>
+          </div>
+        </div>
+        <div class="alert-item">
+          <div class="alert-dot acid"></div>
+          <div>
+            <div class="alert-text">Избыток ликвидности GBP</div>
+            <div class="alert-meta">Barclays · £3.1M</div>
+            <span class="badge-sm acid">AI рекомендация</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM ROW: accounts + pulse -->
+    <div class="bot-row">
+
+      <!-- ACCOUNTS TABLE -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">НОСТРО / КОРРЕСПОНДЕНТ</span>
+        </div>
+        <table class="accounts-tbl">
+          <thead>
+            <tr><th>Банк</th><th>Вал.</th><th>Баланс</th><th>Загрузка</th><th>Статус</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Deutsche Bank</td>
+              <td><span class="tag">EUR</span></td>
+              <td style="color:var(--rose)">€8.2M</td>
+              <td><div class="bar"><div class="bar-fill" style="width:82%;background:var(--rose)"></div></div></td>
+              <td style="color:var(--rose);font-size:10px">⚠ Риск</td>
+            </tr>
+            <tr>
+              <td>Barclays</td>
+              <td><span class="tag">GBP</span></td>
+              <td style="color:var(--acid)">£14.7M</td>
+              <td><div class="bar"><div class="bar-fill" style="width:38%;background:var(--acid)"></div></div></td>
+              <td style="color:var(--acid);font-size:10px">✓ Норма</td>
+            </tr>
+            <tr>
+              <td>JPMorgan</td>
+              <td><span class="tag">USD</span></td>
+              <td style="color:var(--acid)">$22.1M</td>
+              <td><div class="bar"><div class="bar-fill" style="width:55%;background:var(--acid)"></div></div></td>
+              <td style="color:var(--acid);font-size:10px">✓ Норма</td>
+            </tr>
+            <tr>
+              <td>Mizuho</td>
+              <td><span class="tag">JPY</span></td>
+              <td style="color:var(--gold)">¥1.82B</td>
+              <td><div class="bar"><div class="bar-fill" style="width:67%;background:var(--gold)"></div></div></td>
+              <td style="color:var(--gold);font-size:10px">⏳ Задержка</td>
+            </tr>
+            <tr>
+              <td>UBS</td>
+              <td><span class="tag">CHF</span></td>
+              <td style="color:var(--acid)">₣4.3M</td>
+              <td><div class="bar"><div class="bar-fill" style="width:22%;background:var(--acid)"></div></div></td>
+              <td style="color:var(--acid);font-size:10px">✓ Норма</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PULSE FEED -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">ПУЛЬС ТРАНЗАКЦИЙ · LIVE</span>
+          <span style="font-size:10px;color:var(--acid);font-family:var(--mono)" id="feed-count">0 сегодня</span>
+        </div>
+        <div class="pulse-feed" id="pulse-feed"></div>
+        <div class="pulse-stats" id="pulse-stats">
+          <!-- filled by JS based on region -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- INFRA HEALTH -->
+    <div class="card health-card">
+      <div class="card-header">
+        <span class="card-title">ЗДОРОВЬЕ ИНФРАСТРУКТУРЫ</span>
+        <span style="font-size:10px;font-family:var(--mono);color:var(--txt-dim)">Все сервисы</span>
+      </div>
+      <div class="health-grid" id="health-grid">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="dashboard.js"></script>
+</body>
+</html>
